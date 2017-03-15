@@ -1,0 +1,72 @@
+$arrow-width: 50px
+=arrow
+    position: absolute
+    cursor: pointer
+    width: $arrow-width
+    height: 50px
+    &::after
+      content: ""
+      position: absolute
+      top: 30%
+      left: 50%
+      background: grey
+      width: 3px
+      height: 15px
+      border-radius: 3px
+      transform: rotate(45deg)
+    &::before
+      content: ""
+      position: absolute
+      top: 50%
+      left: 50%
+      background: grey
+      width: 3px
+      height: 15px
+      border-radius: 3px
+      transform: rotate(135deg)
+
+.carousel
+  position: relative
+  display: flex
+  align-items: center
+  justify-content: center
+  width: auto
+.right
+  right: 0
+.left
+  left: 0
+.right-arrow
+  +arrow
+  transform: rotate(180deg)
+.left-arrow
+  +arrow
+
+.root
+  display: flex
+  width: calc(#{100%} - #{$arrow-width * 2})
+  overflow: hidden
+  height: 500px
+  align-items: center
+  justify-content: center
+
+.children-container
+  display: flex
+  width: 100%
+  position: relative
+  // transition: 1s
+
+.example
+  width: 10px
+.example-enter
+  opacity: 0.01
+
+.example-enter.example-enter-active
+  opacity: 1
+  transition: opacity 500ms ease-in
+
+.example-leave
+  opacity: 1
+
+.example-leave.example-leave-active
+  opacity: 0.01
+  transition: opacity 300ms ease-in
