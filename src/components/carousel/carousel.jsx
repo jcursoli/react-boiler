@@ -10,24 +10,26 @@ class Carousel extends PureComponent {
       childIndex: 0,
       width: 0,
       rightOffset: 0,
-      rounds: 0,
       disabled: props.disabled,
       animate: !props.infinite,
-      // if infinte then dont animate on initial position which is middle
+      childOffsetCount: 0,
     };
   }
   componentDidMount() {
-    const { inView, seperation, disabled, children, skipBy } = this.props;
+    const { inView, seperation, disabled, children, skipBy, infinite } = this.props;
     const newSkipBy = skipBy ? skipBy : inView;
     const inviewTotal = inView > children.length ? children.length : inView;
     const disable = (inviewTotal === children.length) || disabled;
     const width = ( ( this.container.offsetWidth - (seperation * (inviewTotal -1) ) ) / ( inviewTotal || 1 ) );
-    const startRightOffset = (inView * ( width + seperation ) );
-    this.setState({ width, disabled: disable, rightOffset: startRightOffset, skipBy: newSkipBy });
+    // childOffsetCount used for determining how many clones should be created
+    // add children.length % inviewTotal for when children.length is not divisible by how many are being skipped (newSkipBy)
+    const childOffsetCount = infinite ? (children.length % inviewTotal === 0 ? inviewTotal : inviewTotal + ( children.length % newSkipBy ) ) : 0;
+    const startRightOffset = (childOffsetCount * ( width + seperation ) );
+    this.setState({ width, disabled: disable, rightOffset: startRightOffset, skipBy: newSkipBy, childOffsetCount });
   }
   mapNewChildren = () => {
     const { children, seperation, infinite, inView } = this.props;
-    const { width, childIndex, rounds } = this.state;
+    const { width, childIndex, childOffsetCount } = this.state;
     const mappedChildren = Children.map(children, (element) =>
       cloneElement(element, {
        ...element.props,
@@ -37,13 +39,14 @@ class Carousel extends PureComponent {
     if (infinite) {
       const newChildren = Children.toArray(mappedChildren);
       // TODO do extra check if inView > length
-      const beginningArray = newChildren.slice(newChildren.length - inView, newChildren.length).map((element, index) =>
+      // TODO check if children and inview are not % 2 aka uneven
+      const beginningArray = newChildren.slice(newChildren.length - childOffsetCount, newChildren.length).map((element, index) =>
         cloneElement(element, {
           ...element.props,
           key: `${index}_beginning`
         })
       )
-      const endArray = newChildren.slice(0, inView).map((element, index) =>
+      const endArray = newChildren.slice(0, childOffsetCount).map((element, index) =>
         cloneElement(element, {
          ...element.props,
          key: `${index}_end`
@@ -55,16 +58,17 @@ class Carousel extends PureComponent {
   }
   handleLeft = throttle(() => {
     const { children, seperation, infinite, inView, animationTime } = this.props;
-    const { childIndex, rightOffset, width, disabled, rounds, skipBy } = this.state;
-    const newOffset = ( rightOffset - ( skipBy * ( width + ( seperation || 0 ) ) ) );
+    const { childIndex, rightOffset, width, disabled, skipBy, childOffsetCount } = this.state;
+    const newOffset = ( rightOffset - ( skipBy * ( width + seperation ) ) );
     const newChildIndex = childIndex - skipBy;
     if (this.animateTimer || disabled) { return; }
     if (newChildIndex <= 0) {
       if (infinite === true) {
         this.setState({ rightOffset: newOffset, childIndex: newChildIndex, animate: true }, () => {
           this.animateTimer = setTimeout(() => {
-            const fastChangeOffset = ( children.length ) * ( width + seperation );
-            this.setState({ rightOffset: fastChangeOffset, childIndex: children.length - 1, animate: false });
+            const subtractIfLarger = children.length + newChildIndex;
+            const fastChangeOffset = ( childOffsetCount + subtractIfLarger ) * ( width + seperation );
+            this.setState({ rightOffset: fastChangeOffset, childIndex: subtractIfLarger, animate: false });
             this.animateTimer = null;
           }, animationTime)
            });
@@ -75,10 +79,12 @@ class Carousel extends PureComponent {
       this.setState({ rightOffset: newOffset, childIndex: newChildIndex, animate: true });
     }
   }, this.props.animationTime)
+
+  // right
   handleRight = throttle(() => {
-    const { children, seperation, infinite, inView, animationTime } = this.props;
-    const { childIndex, rightOffset, width, disabled, rounds, skipBy } = this.state;
-    const newOffset = ( rightOffset + ( skipBy * ( width + ( seperation || 0 ) ) ) );
+    const { children, seperation, infinite, animationTime } = this.props;
+    const { childIndex, rightOffset, width, disabled, skipBy, childOffsetCount } = this.state;
+    const newOffset = ( rightOffset + ( skipBy * ( width + seperation ) ) );
     const newChildIndex = childIndex + skipBy;
     // if waiting for setTimeout to finish animating dont continue click
     // should rarely get here if throttle is precise
@@ -86,9 +92,12 @@ class Carousel extends PureComponent {
     if (newChildIndex >= children.length -1) {
       if (infinite === true) {
         this.setState({ rightOffset: newOffset, childIndex: newChildIndex, animate: true }, () => {
+          const subtractIfLarger = newChildIndex - children.length;
           this.animateTimer = setTimeout(() => {
-            const fastChangeOffset = inView * ( width + seperation );
-            this.setState({ rightOffset: fastChangeOffset, childIndex: 0, animate: false });
+            // fastChangeOffset is derived from getting how many clones (childOffsetCount) and
+            // multiplying the width of all of them to get original starting point without clones
+            const fastChangeOffset = (childOffsetCount + subtractIfLarger) * ( width + seperation );
+            this.setState({ rightOffset: fastChangeOffset, childIndex: subtractIfLarger, animate: false });
             this.animateTimer = null;
           }, animationTime)
            });
@@ -96,7 +105,7 @@ class Carousel extends PureComponent {
           this.setState({ rightOffset: 0, childIndex: 0, animate: true });
         }
     } else {
-      this.setState({ rightOffset: newOffset, childIndex: newChildIndex, rounds: rounds + 1, animate: true });
+      this.setState({ rightOffset: newOffset, childIndex: newChildIndex, animate: true });
     }
   }, this.props.animationTime)
 
