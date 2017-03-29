@@ -68,14 +68,14 @@
   display: flex;
   width: calc(100% - 100px);
   overflow: hidden;
-  height: 500px;
   align-items: center;
   justify-content: center; }
 
 .src-components-carousel-___carousel__children-container___HSM30 {
   display: flex;
   width: 100%;
-  position: relative; }
+  position: relative;
+  align-items: center; }
 
 .src-components-carousel-___carousel__example___1TM1- {
   width: 10px; }
@@ -93,6 +93,28 @@
 .src-components-carousel-___carousel__example-leave___1E6Rf.src-components-carousel-___carousel__example-leave-active___c6Bq7 {
   opacity: 0.01;
   transition: opacity 300ms ease-in; }
+.src-components-carousel-dots-___dots__dot___yZSiM {
+  background: grey;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 8px;
+  width: 8px;
+  margin: 0 3vw; }
+  @media screen and (max-width: 800px) {
+    .src-components-carousel-dots-___dots__dot___yZSiM {
+      height: 5px;
+      width: 5px; } }
+
+.src-components-carousel-dots-___dots__active___9yjZ_ {
+  background: black; }
+
+.src-components-carousel-dots-___dots__dots___3ByhL {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  top: 100%;
+  margin-top: 30px;
+  align-items: center; }
 body {
   margin: 0;
   padding: 0;
@@ -100,7 +122,9 @@ body {
 
 .src-___App__main___3UaM9 {
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  margin-top: 100px;
+  max-height: 400px; }
 
 .src-___App__carousel-img___2wNk6 {
   height: auto;

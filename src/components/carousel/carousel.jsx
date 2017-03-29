@@ -1,6 +1,7 @@
 import React, { PureComponent, Children, cloneElement } from 'react';
 import { throttle } from 'lodash';
 import styles from './carousel.sass';
+import Dots from './dots/dots';
 
 class Carousel extends PureComponent {
   constructor(props) {
@@ -39,19 +40,20 @@ class Carousel extends PureComponent {
     const width = ((this.container.offsetWidth - (seperation * (inviewTotal - 1))) / (inviewTotal || 1));
     const newOffset = ((childOffsetCount + childIndex) * (width + seperation));
     this.setState({ width, rightOffset: newOffset });
-  }, 150)
-  getLargestDivisor(childrenLength, inView) {
-    for (let i = inView; i > 0; i--) {
-      if (childrenLength % i === 0) {
-        return i;
-      }
-    }
-    return 1;
+  }, 200)
+
+  handleDotClick = index => {
+    const { seperation } = this.props;
+    const { width, disabled, childOffsetCount } = this.state;
+    if (disabled) return;
+    const newOffset = ((childOffsetCount + index) * (width + seperation));
+    this.setState({ childIndex: index, rightOffset: newOffset, animate: true });
   }
+
   mapNewChildren = () => {
     const { children, seperation, infinite } = this.props;
     const { width, childOffsetCount } = this.state;
-    const mappedChildren = Children.map(children, (element) =>
+    const mappedChildren = Children.map(children, element =>
       cloneElement(element, {
         ...element.props,
         style: { ...element.props.style, width: `${width}px`, minWidth: `${width}px`, marginRight: `${seperation}px` },
@@ -151,27 +153,28 @@ class Carousel extends PureComponent {
 
   render() {
     const { rightOffset, animate } = this.state;
-    const { animationTime } = this.props;
+    const { animationTime, inView, dots, children } = this.props;
     return (
-      <div className={styles.carousel}>
-        <div
-          onClick={this.handleLeft}
-          className={`${styles['left-arrow']} ${styles.left}`}
-        />
-        <div
-          onClick={this.handleRight}
-          className={`${styles['right-arrow']} ${styles.right}`}
-        />
-        <div className={styles.root}>
+        <div className={styles.carousel}>
           <div
-            ref={container => { this.container = container; }}
-            style={{ right: rightOffset, transition: animate ? `${animationTime / 1000}s` : '0s' }}
-            className={`${styles['children-container']}`}
-          >
-            { this.mapNewChildren() }
+            onClick={this.handleLeft}
+            className={`${styles['left-arrow']} ${styles.left}`}
+          />
+          <div
+            onClick={this.handleRight}
+            className={`${styles['right-arrow']} ${styles.right}`}
+          />
+          <div className={styles.root}>
+            <div
+              ref={container => { this.container = container; }}
+              style={{ right: rightOffset, transition: animate ? `${animationTime / 1000}s` : '0s' }}
+              className={`${styles['children-container']}`}
+            >
+              { this.mapNewChildren() }
+            </div>
           </div>
+          <Dots handleDotClick={this.handleDotClick} childrenLength={Children.count(children)} dots={dots} inView={inView} />
         </div>
-      </div>
     );
   }
 }
