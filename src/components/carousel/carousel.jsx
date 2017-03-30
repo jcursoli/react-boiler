@@ -1,5 +1,5 @@
 import React, { PureComponent, Children, cloneElement } from 'react';
-import { throttle } from 'lodash';
+import { debounce, throttle } from 'lodash';
 import styles from './carousel.sass';
 import Dots from './dots/dots';
 
@@ -85,7 +85,7 @@ class Carousel extends PureComponent {
     }
     return newChildren;
   }
-  handleLeft = throttle(() => {
+  handleLeft = debounce(() => {
     const { children, seperation, infinite, animationTime } = this.props;
     const { childIndex, rightOffset, width, disabled, skipBy, childOffsetCount } = this.state;
     const newOffset = (rightOffset - (skipBy * (width + seperation)));
@@ -110,16 +110,16 @@ class Carousel extends PureComponent {
     } else {
       this.setState({ rightOffset: newOffset, childIndex: newChildIndex, animate: true });
     }
-  }, this.props.animationTime + 15)
+  }, this.props.animationTime + 15, { leading: true, maxWait: this.props.animationTime + 15 })
 
   // right
-  handleRight = throttle(() => {
+  handleRight = debounce(() => {
     const { children, seperation, infinite, animationTime, inView } = this.props;
     const { childIndex, rightOffset, width, disabled, skipBy, childOffsetCount } = this.state;
     const newChildIndex = childIndex + skipBy;
     const newOffset = (rightOffset + (skipBy * (width + seperation)));
     // if waiting for setTimeout to finish animating dont continue click
-    // should rarely get here if throttle is precise
+    // should rarely get here if debounce is precise
     if (this.animateTimer || disabled) { return; }
     if (newChildIndex >= children.length - 1) {
       if (infinite === true) {
@@ -155,7 +155,7 @@ class Carousel extends PureComponent {
         this.setState({ rightOffset: newOffset, childIndex: newChildIndex, animate: true });
       }
     }
-  }, this.props.animationTime + 15)
+  }, this.props.animationTime + 15, { leading: true, maxWait: this.props.animationTime + 15 })
 
   render() {
     const { rightOffset, animate, childIndex } = this.state;
