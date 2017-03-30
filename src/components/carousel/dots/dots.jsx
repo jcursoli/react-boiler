@@ -4,15 +4,15 @@ import styles from './dots.sass';
 class Dots extends PureComponent {
 
   createDots = count => {
-    const { currentIndex, dots, inView } = this.props;
+    const { currentIndex, dots, inView, style } = this.props;
     const pageIndex = Math.ceil(currentIndex / inView) >= count ? count - 1 : Math.ceil(currentIndex / inView);
     const realIndex = dots === 'page' ? pageIndex : currentIndex;
     const dotsArray = [];
     for (let i = 0; i < count; i ++) {
       if (realIndex === i) {
-        dotsArray.push(<div onClick={e => this.handleClick(e, i)} key={i} className={`${styles.dot} ${styles.active}`} />);
+        dotsArray.push(<div style={style} onClick={e => this.handleClick(e, i)} key={i} className={`${styles.dot} ${styles.active}`} />);
       } else {
-        dotsArray.push(<div onClick={e => this.handleClick(e, i)} key={i} className={styles.dot} />);
+        dotsArray.push(<div style={style} onClick={e => this.handleClick(e, i)} key={i} className={styles.dot} />);
       }
     }
     return dotsArray;
