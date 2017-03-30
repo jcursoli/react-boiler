@@ -150,7 +150,7 @@ class Carousel extends PureComponent {
       if (infinite === false && newChildIndex + inView > children.length - 1) {
         const lastSkipByIfUneven = skipBy - ((newChildIndex + inView) - children.length);
         const newOffsetWithoutEmptySlots = (rightOffset + (lastSkipByIfUneven * (width + seperation)));
-        this.setState({ rightOffset: newOffsetWithoutEmptySlots, childIndex: children.length, animate: true });
+        this.setState({ rightOffset: newOffsetWithoutEmptySlots, childIndex: childIndex + lastSkipByIfUneven, animate: true });
       } else {
         this.setState({ rightOffset: newOffset, childIndex: newChildIndex, animate: true });
       }

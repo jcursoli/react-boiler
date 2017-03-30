@@ -5,7 +5,8 @@ class Dots extends PureComponent {
 
   createDots = count => {
     const { currentIndex, dots, inView } = this.props;
-    const realIndex = dots === 'page' ? Math.ceil(currentIndex / inView) : currentIndex;
+    const pageIndex = Math.ceil(currentIndex / inView) >= count ? count - 1 : Math.ceil(currentIndex / inView);
+    const realIndex = dots === 'page' ? pageIndex : currentIndex;
     const dotsArray = [];
     for (let i = 0; i < count; i ++) {
       if (realIndex === i) {
