@@ -9475,7 +9475,7 @@ var App = function (_Component) {
         { className: __WEBPACK_IMPORTED_MODULE_2__App_sass___default.a.main },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1__components_carousel_carousel__["a" /* default */],
-          { inView: 3, seperation: 30, animationTime: 500, skipBy: 3, infinite: true, dots: 'item' },
+          { inView: 3, seperation: 30, animationTime: 500, skipBy: 3, dots: 'page' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
             { style: { background: "#2f92d6", height: '300px' }, key: 1 },
@@ -9525,6 +9525,16 @@ var App = function (_Component) {
             'div',
             { style: { background: "#2f92d6", height: '300px' }, key: 10 },
             '10'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { style: { background: "#2f92d6", height: '300px' }, key: 11 },
+            '11'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { style: { background: "#2f92d6", height: '300px' }, key: 12 },
+            '12'
           )
         )
       );
@@ -9610,22 +9620,32 @@ var Carousel = function (_PureComponent) {
     }, 200);
 
     _this.handleDotClick = function (index) {
-      var seperation = _this.props.seperation;
+      var _this$props2 = _this.props,
+          seperation = _this$props2.seperation,
+          children = _this$props2.children,
+          inView = _this$props2.inView,
+          infinite = _this$props2.infinite;
       var _this$state2 = _this.state,
           width = _this$state2.width,
           disabled = _this$state2.disabled,
           childOffsetCount = _this$state2.childOffsetCount;
 
       if (disabled) return;
-      var newOffset = (childOffsetCount + index) * (width + seperation);
-      _this.setState({ childIndex: index, rightOffset: newOffset, animate: true });
+      if (infinite === true) {
+        var newOffset = (childOffsetCount + index) * (width + seperation);
+        _this.setState({ childIndex: index, rightOffset: newOffset, animate: true });
+      } else {
+        var modifiedIndex = index + inView > children.length ? index - (index + inView - children.length) : index;
+        var _newOffset = modifiedIndex * (width + seperation);
+        _this.setState({ rightOffset: _newOffset, childIndex: index, animate: true });
+      }
     };
 
     _this.mapNewChildren = function () {
-      var _this$props2 = _this.props,
-          children = _this$props2.children,
-          seperation = _this$props2.seperation,
-          infinite = _this$props2.infinite;
+      var _this$props3 = _this.props,
+          children = _this$props3.children,
+          seperation = _this$props3.seperation,
+          infinite = _this$props3.infinite;
       var _this$state3 = _this.state,
           width = _this$state3.width,
           childOffsetCount = _this$state3.childOffsetCount;
@@ -9655,11 +9675,11 @@ var Carousel = function (_PureComponent) {
     };
 
     _this.handleLeft = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash__["throttle"])(function () {
-      var _this$props3 = _this.props,
-          children = _this$props3.children,
-          seperation = _this$props3.seperation,
-          infinite = _this$props3.infinite,
-          animationTime = _this$props3.animationTime;
+      var _this$props4 = _this.props,
+          children = _this$props4.children,
+          seperation = _this$props4.seperation,
+          infinite = _this$props4.infinite,
+          animationTime = _this$props4.animationTime;
       var _this$state4 = _this.state,
           childIndex = _this$state4.childIndex,
           rightOffset = _this$state4.rightOffset,
@@ -9694,12 +9714,12 @@ var Carousel = function (_PureComponent) {
       }
     }, _this.props.animationTime + 15);
     _this.handleRight = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash__["throttle"])(function () {
-      var _this$props4 = _this.props,
-          children = _this$props4.children,
-          seperation = _this$props4.seperation,
-          infinite = _this$props4.infinite,
-          animationTime = _this$props4.animationTime,
-          inView = _this$props4.inView;
+      var _this$props5 = _this.props,
+          children = _this$props5.children,
+          seperation = _this$props5.seperation,
+          infinite = _this$props5.infinite,
+          animationTime = _this$props5.animationTime,
+          inView = _this$props5.inView;
       var _this$state5 = _this.state,
           childIndex = _this$state5.childIndex,
           rightOffset = _this$state5.rightOffset,
@@ -9802,7 +9822,8 @@ var Carousel = function (_PureComponent) {
 
       var _state = this.state,
           rightOffset = _state.rightOffset,
-          animate = _state.animate;
+          animate = _state.animate,
+          childIndex = _state.childIndex;
       var _props2 = this.props,
           animationTime = _props2.animationTime,
           inView = _props2.inView,
@@ -9835,7 +9856,13 @@ var Carousel = function (_PureComponent) {
             this.mapNewChildren()
           )
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__dots_dots__["a" /* default */], { handleDotClick: this.handleDotClick, childrenLength: __WEBPACK_IMPORTED_MODULE_0_react__["Children"].count(children), dots: dots, inView: inView })
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__dots_dots__["a" /* default */], {
+          handleDotClick: this.handleDotClick,
+          childrenLength: __WEBPACK_IMPORTED_MODULE_0_react__["Children"].count(children),
+          dots: dots,
+          inView: inView,
+          currentIndex: childIndex
+        })
       );
     }
   }]);
@@ -39296,17 +39323,27 @@ var Dots = function (_PureComponent) {
   _inherits(Dots, _PureComponent);
 
   function Dots() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, Dots);
 
-    var _this = _possibleConstructorReturn(this, (Dots.__proto__ || Object.getPrototypeOf(Dots)).call(this));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
 
-    _this.createDots = function (count) {
-      var clickedDotIndex = _this.state.clickedDotIndex;
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Dots.__proto__ || Object.getPrototypeOf(Dots)).call.apply(_ref, [this].concat(args))), _this), _this.createDots = function (count) {
+      var _this$props = _this.props,
+          currentIndex = _this$props.currentIndex,
+          dots = _this$props.dots,
+          inView = _this$props.inView;
 
+      var realIndex = dots === 'page' ? Math.ceil(currentIndex / inView) : currentIndex;
       var dotsArray = [];
 
       var _loop = function _loop(i) {
-        if (clickedDotIndex === i) {
+        if (realIndex === i) {
           dotsArray.push(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { onClick: function onClick(e) {
               return _this.handleClick(e, i);
             }, key: i, className: __WEBPACK_IMPORTED_MODULE_1__dots_sass___default.a.dot + ' ' + __WEBPACK_IMPORTED_MODULE_1__dots_sass___default.a.active }));
@@ -39321,21 +39358,22 @@ var Dots = function (_PureComponent) {
         _loop(i);
       }
       return dotsArray;
-    };
+    }, _this.handleClick = function (e, clickedDotIndex) {
+      var _this$props2 = _this.props,
+          inView = _this$props2.inView,
+          handleDotClick = _this$props2.handleDotClick,
+          dots = _this$props2.dots;
 
-    _this.handleClick = function (e, clickedDotIndex) {
-      var handleDotClick = _this.props.handleDotClick;
-
-      console.log(clickedDotIndex);
-      _this.setState({ clickedDotIndex: clickedDotIndex });
-      handleDotClick(clickedDotIndex);
-    };
-
-    _this.getDots = function () {
-      var _this$props = _this.props,
-          dots = _this$props.dots,
-          inView = _this$props.inView,
-          childrenLength = _this$props.childrenLength;
+      if (dots === 'page') {
+        handleDotClick(clickedDotIndex * inView);
+      } else {
+        handleDotClick(clickedDotIndex);
+      }
+    }, _this.getDots = function () {
+      var _this$props3 = _this.props,
+          dots = _this$props3.dots,
+          inView = _this$props3.inView,
+          childrenLength = _this$props3.childrenLength;
 
       var count = Math.ceil(childrenLength / inView);
       if (!dots) return null;
@@ -39347,12 +39385,7 @@ var Dots = function (_PureComponent) {
         default:
           return _this.createDots(count);
       }
-    };
-
-    _this.state = {
-      clickedDotIndex: 0
-    };
-    return _this;
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(Dots, [{
@@ -39374,6 +39407,7 @@ var Dots = function (_PureComponent) {
 Dots.propTypes = {
   dots: __WEBPACK_IMPORTED_MODULE_0_react___default.a.PropTypes.string.isRequired,
   inView: __WEBPACK_IMPORTED_MODULE_0_react___default.a.PropTypes.number.isRequired,
+  currentIndex: __WEBPACK_IMPORTED_MODULE_0_react___default.a.PropTypes.number.isRequired,
   childrenLength: __WEBPACK_IMPORTED_MODULE_0_react___default.a.PropTypes.number.isRequired,
   handleDotClick: __WEBPACK_IMPORTED_MODULE_0_react___default.a.PropTypes.func.isRequired
 };

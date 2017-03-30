@@ -43,11 +43,17 @@ class Carousel extends PureComponent {
   }, 200)
 
   handleDotClick = index => {
-    const { seperation } = this.props;
+    const { seperation, children, inView, infinite } = this.props;
     const { width, disabled, childOffsetCount } = this.state;
     if (disabled) return;
-    const newOffset = ((childOffsetCount + index) * (width + seperation));
-    this.setState({ childIndex: index, rightOffset: newOffset, animate: true });
+    if (infinite === true) {
+      const newOffset = ((childOffsetCount + index) * (width + seperation));
+      this.setState({ childIndex: index, rightOffset: newOffset, animate: true });
+    } else {
+      const modifiedIndex = (index + inView) > children.length ? index - ((index + inView) - children.length) : index;
+      const newOffset = (modifiedIndex * (width + seperation));
+      this.setState({ rightOffset: newOffset, childIndex: index, animate: true });
+    }
   }
 
   mapNewChildren = () => {
@@ -152,7 +158,7 @@ class Carousel extends PureComponent {
   }, this.props.animationTime + 15)
 
   render() {
-    const { rightOffset, animate } = this.state;
+    const { rightOffset, animate, childIndex } = this.state;
     const { animationTime, inView, dots, children } = this.props;
     return (
         <div className={styles.carousel}>
@@ -173,7 +179,13 @@ class Carousel extends PureComponent {
               { this.mapNewChildren() }
             </div>
           </div>
-          <Dots handleDotClick={this.handleDotClick} childrenLength={Children.count(children)} dots={dots} inView={inView} />
+          <Dots
+            handleDotClick={this.handleDotClick}
+            childrenLength={Children.count(children)}
+            dots={dots}
+            inView={inView}
+            currentIndex={childIndex}
+          />
         </div>
     );
   }

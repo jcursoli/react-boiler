@@ -12,7 +12,7 @@ class App extends Component {
         {/* <Carousel inView={5} seperation={30} animationTime={500} skipBy={4}> */}
         {/* <Carousel inView={4} seperation={30} animationTime={500} skipBy={3}> */}
         {/* <Carousel inView={5} seperation={30} animationTime={500} skipBy={3}>*/}
-        <Carousel inView={3} seperation={30} animationTime={500} skipBy={3} infinite dots='item'>
+        <Carousel inView={3} seperation={30} animationTime={500} skipBy={3} dots='page'>
           <div style={{background: "#2f92d6", height: '300px'}} key={1}>1</div>
           <div style={{background: "#2f92d6", height: '300px'}} key={2}>2</div>
           <div style={{background: "#2f92d6", height: '300px'}} key={3}>3</div>
@@ -23,6 +23,8 @@ class App extends Component {
           <div style={{background: "#2f92d6", height: '300px'}} key={8}>8</div>
           <div style={{background: "#2f92d6", height: '300px'}} key={9}>9</div>
           <div style={{background: "#2f92d6", height: '300px'}} key={10}>10</div>
+          <div style={{background: "#2f92d6", height: '300px'}} key={11}>11</div>
+          <div style={{background: "#2f92d6", height: '300px'}} key={12}>12</div>
 
         </Carousel>
       </div>

@@ -2,18 +2,13 @@ import React, { PureComponent } from 'react';
 import styles from './dots.sass';
 
 class Dots extends PureComponent {
-  constructor() {
-    super();
-    this.state = {
-      clickedDotIndex: 0,
-    };
-  }
 
   createDots = count => {
-    const { clickedDotIndex } = this.state;
+    const { currentIndex, dots, inView } = this.props;
+    const realIndex = dots === 'page' ? Math.ceil(currentIndex / inView) : currentIndex;
     const dotsArray = [];
     for (let i = 0; i < count; i ++) {
-      if (clickedDotIndex === i) {
+      if (realIndex === i) {
         dotsArray.push(<div onClick={e => this.handleClick(e, i)} key={i} className={`${styles.dot} ${styles.active}`} />);
       } else {
         dotsArray.push(<div onClick={e => this.handleClick(e, i)} key={i} className={styles.dot} />);
@@ -22,12 +17,13 @@ class Dots extends PureComponent {
     return dotsArray;
   }
 
-
   handleClick = (e, clickedDotIndex) => {
-    const { handleDotClick } = this.props
-    console.log(clickedDotIndex)
-    this.setState({ clickedDotIndex });
-    handleDotClick(clickedDotIndex);
+    const { inView, handleDotClick, dots } = this.props;
+    if (dots === 'page') {
+      handleDotClick(clickedDotIndex * inView);
+    } else {
+      handleDotClick(clickedDotIndex);
+    }
   }
 
   getDots = () => {
@@ -52,6 +48,7 @@ class Dots extends PureComponent {
 Dots.propTypes = {
   dots: React.PropTypes.string.isRequired,
   inView: React.PropTypes.number.isRequired,
+  currentIndex: React.PropTypes.number.isRequired,
   childrenLength: React.PropTypes.number.isRequired,
   handleDotClick: React.PropTypes.func.isRequired,
 };
