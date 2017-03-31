@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import styles from './dots.sass';
 
-class Dots extends PureComponent {
+class Dots extends Component {
 
   createDots = count => {
     const { currentIndex, dotsType, dots, inView, style, dotsClassName } = this.props;
@@ -30,10 +30,10 @@ class Dots extends PureComponent {
   }
 
   getDots = () => {
-    const { dots, inView, childrenLength } = this.props;
+    const { dots, inView, childrenLength, dotsType } = this.props;
     const count = Math.ceil(childrenLength / inView);
     if (!dots) return null;
-    switch (dots) {
+    switch (dotsType) {
       case 'page' :
         return this.createDots(count);
       case 'item' :
@@ -49,11 +49,14 @@ class Dots extends PureComponent {
   }
 }
 Dots.propTypes = {
-  dots: React.PropTypes.string.isRequired,
+  dots: React.PropTypes.bool.isRequired,
+  dotsType: React.PropTypes.string.isRequired,
   inView: React.PropTypes.number.isRequired,
   currentIndex: React.PropTypes.number.isRequired,
   childrenLength: React.PropTypes.number.isRequired,
   handleDotClick: React.PropTypes.func.isRequired,
+  dotsClassName: React.PropTypes.string.isRequired,
+  style: React.PropTypes.object.objectOf(React.PropTypes.string),
 };
 
 export default Dots;
