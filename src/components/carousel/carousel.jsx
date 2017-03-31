@@ -203,7 +203,7 @@ Carousel.propTypes = {
   infinite: React.PropTypes.bool,
   dotsStyle: React.PropTypes.object,
   dotsType: React.PropTypes.string,
-  dots: React.PropTypes.string.bool,
+  dots: React.PropTypes.bool,
   dotsClassName: React.PropTypes.string,
 };
 Carousel.defaultProps = {

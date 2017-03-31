@@ -56,7 +56,7 @@ Dots.propTypes = {
   childrenLength: React.PropTypes.number.isRequired,
   handleDotClick: React.PropTypes.func.isRequired,
   dotsClassName: React.PropTypes.string.isRequired,
-  style: React.PropTypes.object.objectOf(React.PropTypes.string),
+  style: React.PropTypes.objectOf(React.PropTypes.string),
 };
 
 export default Dots;
