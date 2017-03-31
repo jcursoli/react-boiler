@@ -4,6 +4,7 @@ import styles from './App.sass';
 
 class App extends Component {
   render() {
+    const dotsStyle = { width: '20px', height: '20px' };
     return (
       <div className={styles.main}>
         {/* <Carousel inView={3} seperation={30} animationTime={500}> */}
@@ -12,7 +13,7 @@ class App extends Component {
         {/* <Carousel inView={5} seperation={30} animationTime={500} skipBy={4}> */}
         {/* <Carousel inView={4} seperation={30} animationTime={500} skipBy={3}> */}
         {/* <Carousel inView={5} seperation={30} animationTime={500} skipBy={3}>*/}
-        <Carousel inView={3} seperation={30} animationTime={500} skipBy={3} dots='page' infinite>
+        <Carousel inView={3} seperation={30} animationTime={500} skipBy={3} dots='page' infinite dotsStyle={dotsStyle}>
           <div style={{background: "#2f92d6", height: '300px'}} key={1}>1</div>
           <div style={{background: "#2f92d6", height: '300px'}} key={2}>2</div>
           <div style={{background: "#2f92d6", height: '300px'}} key={3}>3</div>

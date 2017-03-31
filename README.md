@@ -12,16 +12,16 @@
 
 ## Carousel Props
   * inView (number) : how many children to be displayed at once   
-    * default: 2
+    * default: 2   
   * skipBy (number) : how many items the arrows will skip though on each click   
     * default: inView   
   * seperation (number) : how much space to be between each item (in pixels)   
-    * default: 30
+    * default: 30   
   * animationTime (number) : how long animation should take place (in ms)   
-    * default: 1000
+    * default: 1000   
   * infinite (bool) : if carousel should loop infinitely without animating oppisite way if reached the end   
   * dotsType (string)   
-    * default 'page' : displays dots for each page of items
+    * default 'page' : displays dots for each page of items   
     * 'item' : displays dots for each item
   * dots (bool) : display dots
-    * default: true
+    * default: true   
