@@ -15,7 +15,7 @@
     * default: 2   
   * skipBy (number) : how many items the arrows will skip though on each click   
     * default: inView   
-  * seperation (number) : how much space to be between each item (in pixels)   
+  * gutter (number) : how much space to be between each item (in pixels)   
     * default: 30   
   * animationTime (number) : how long animation should take place (in ms)   
     * default: 1000   

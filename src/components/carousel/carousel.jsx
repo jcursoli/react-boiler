@@ -18,15 +18,15 @@ class Carousel extends PureComponent {
   }
   // TODO add dynamic height to root carousel element
   componentDidMount() {
-    const { inView, seperation, disabled, children, skipBy, infinite } = this.props;
+    const { inView, gutter, disabled, children, skipBy, infinite } = this.props;
     const newSkipBy = skipBy || inView;
     const inviewTotal = inView > children.length ? children.length : inView;
     const disable = (inviewTotal === children.length) || disabled;
-    const width = ((this.container.offsetWidth - (seperation * (inviewTotal - 1))) / (inviewTotal || 1));
+    const width = ((this.container.offsetWidth - (gutter * (inviewTotal - 1))) / (inviewTotal || 1));
     // childOffsetCount used for determining how many clones should be created
     // add children.length % inviewTotal for when children.length is not divisible by how many are being skipped (newSkipBy)
     const childOffsetCount = infinite ? (children.length % inviewTotal === 0 ? inviewTotal : inviewTotal + (children.length % newSkipBy)) : 0;
-    const startRightOffset = (childOffsetCount * (width + seperation));
+    const startRightOffset = (childOffsetCount * (width + gutter));
     this.setState({ width, childOffsetCount, disabled: disable, rightOffset: startRightOffset, skipBy: newSkipBy });
     window.addEventListener('resize', this.carouselResize);
   }
@@ -34,35 +34,35 @@ class Carousel extends PureComponent {
     window.removeEventListener('resize', this.carouselResize);
   }
   carouselResize = throttle(() => {
-    const { seperation, children, inView } = this.props;
+    const { gutter, children, inView } = this.props;
     const { childOffsetCount, childIndex } = this.state;
     const inviewTotal = inView > children.length ? children.length : inView;
-    const width = ((this.container.offsetWidth - (seperation * (inviewTotal - 1))) / (inviewTotal || 1));
-    const newOffset = ((childOffsetCount + childIndex) * (width + seperation));
+    const width = ((this.container.offsetWidth - (gutter * (inviewTotal - 1))) / (inviewTotal || 1));
+    const newOffset = ((childOffsetCount + childIndex) * (width + gutter));
     this.setState({ width, rightOffset: newOffset });
   }, 200)
 
   handleDotClick = index => {
-    const { seperation, children, inView, infinite } = this.props;
+    const { gutter, children, inView, infinite } = this.props;
     const { width, disabled, childOffsetCount } = this.state;
     if (disabled) return;
     if (infinite === true) {
-      const newOffset = ((childOffsetCount + index) * (width + seperation));
+      const newOffset = ((childOffsetCount + index) * (width + gutter));
       this.setState({ childIndex: index, rightOffset: newOffset, animate: true });
     } else {
       const modifiedIndex = (index + inView) > children.length ? index - ((index + inView) - children.length) : index;
-      const newOffset = (modifiedIndex * (width + seperation));
+      const newOffset = (modifiedIndex * (width + gutter));
       this.setState({ rightOffset: newOffset, childIndex: index, animate: true });
     }
   }
 
   mapNewChildren = () => {
-    const { children, seperation, infinite } = this.props;
+    const { children, gutter, infinite } = this.props;
     const { width, childOffsetCount } = this.state;
     const mappedChildren = Children.map(children, element =>
       cloneElement(element, {
         ...element.props,
-        style: { ...element.props.style, width: `${width}px`, minWidth: `${width}px`, marginRight: `${seperation}px` },
+        style: { ...element.props.style, width: `${width}px`, minWidth: `${width}px`, marginRight: `${gutter}px` },
       })
     );
     const newChildren = Children.toArray(mappedChildren);
@@ -86,9 +86,9 @@ class Carousel extends PureComponent {
     return newChildren;
   }
   handleLeft = debounce(() => {
-    const { children, seperation, infinite, animationTime } = this.props;
+    const { children, gutter, infinite, animationTime } = this.props;
     const { childIndex, rightOffset, width, disabled, skipBy, childOffsetCount } = this.state;
-    const newOffset = (rightOffset - (skipBy * (width + seperation)));
+    const newOffset = (rightOffset - (skipBy * (width + gutter)));
     const newChildIndex = childIndex - skipBy;
     if (this.animateTimer || disabled) { return; }
     if (newChildIndex <= 0) {
@@ -96,7 +96,7 @@ class Carousel extends PureComponent {
         this.setState({ rightOffset: newOffset, childIndex: newChildIndex, animate: true }, () => {
           this.animateTimer = setTimeout(() => {
             const subtractIfLarger = children.length + newChildIndex;
-            const fastChangeOffset = (childOffsetCount + subtractIfLarger) * (width + seperation);
+            const fastChangeOffset = (childOffsetCount + subtractIfLarger) * (width + gutter);
             this.setState({ rightOffset: fastChangeOffset, childIndex: subtractIfLarger, animate: false });
             this.animateTimer = null;
           }, animationTime);
@@ -114,10 +114,10 @@ class Carousel extends PureComponent {
 
   // right
   handleRight = debounce(() => {
-    const { children, seperation, infinite, animationTime, inView } = this.props;
+    const { children, gutter, infinite, animationTime, inView } = this.props;
     const { childIndex, rightOffset, width, disabled, skipBy, childOffsetCount } = this.state;
     const newChildIndex = childIndex + skipBy;
-    const newOffset = (rightOffset + (skipBy * (width + seperation)));
+    const newOffset = (rightOffset + (skipBy * (width + gutter)));
     // if waiting for setTimeout to finish animating dont continue click
     // should rarely get here if debounce is precise
     if (this.animateTimer || disabled) { return; }
@@ -128,7 +128,7 @@ class Carousel extends PureComponent {
           this.animateTimer = setTimeout(() => {
             // fastChangeOffset is derived from getting how many clones (childOffsetCount) and
             // multiplying the width of all of them to get original starting point without clones
-            const fastChangeOffset = (childOffsetCount + subtractIfLarger) * (width + seperation);
+            const fastChangeOffset = (childOffsetCount + subtractIfLarger) * (width + gutter);
             this.setState({ rightOffset: fastChangeOffset, childIndex: subtractIfLarger, animate: false });
             this.animateTimer = null;
           }, animationTime);
@@ -138,7 +138,7 @@ class Carousel extends PureComponent {
         // if so edit skip count to be remaining items off screen
         if (infinite === false && children.length > childIndex + inView) {
           const offsetOddCount = children.length - (childIndex + inView);
-          const newOffsetWithRemainingSlides = (rightOffset + (offsetOddCount * (width + seperation)));
+          const newOffsetWithRemainingSlides = (rightOffset + (offsetOddCount * (width + gutter)));
           this.setState({ rightOffset: newOffsetWithRemainingSlides, childIndex: childIndex + offsetOddCount, animate: true });
         } else {
           this.setState({ rightOffset: 0, childIndex: 0, animate: true });
@@ -149,7 +149,7 @@ class Carousel extends PureComponent {
       // i.e check if next skip will be too large for remaining items
       if (infinite === false && newChildIndex + inView > children.length - 1) {
         const lastSkipByIfUneven = skipBy - ((newChildIndex + inView) - children.length);
-        const newOffsetWithoutEmptySlots = (rightOffset + (lastSkipByIfUneven * (width + seperation)));
+        const newOffsetWithoutEmptySlots = (rightOffset + (lastSkipByIfUneven * (width + gutter)));
         this.setState({ rightOffset: newOffsetWithoutEmptySlots, childIndex: childIndex + lastSkipByIfUneven, animate: true });
       } else {
         this.setState({ rightOffset: newOffset, childIndex: newChildIndex, animate: true });
@@ -196,7 +196,7 @@ class Carousel extends PureComponent {
 Carousel.propTypes = {
   children: React.PropTypes.array,
   inView: React.PropTypes.number,
-  seperation: React.PropTypes.number,
+  gutter: React.PropTypes.number,
   disabled: React.PropTypes.bool,
   skipBy: React.PropTypes.number,
   animationTime: React.PropTypes.number,
@@ -211,7 +211,7 @@ Carousel.defaultProps = {
   disabled: false,
   infinite: false,
   inView: 2,
-  seperation: 30,
+  gutter: 30,
   skipBy: undefined,
   dots: true,
   dotsClassName: '',
