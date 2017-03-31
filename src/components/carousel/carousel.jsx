@@ -33,13 +33,13 @@ class Carousel extends PureComponent {
   componentWillUnmount() {
     window.removeEventListener('resize', this.carouselResize);
   }
-  carouselResize = throttle(() => {
+  carouselResize = debounce(() => {
     const { gutter, children, inView } = this.props;
     const { childOffsetCount, childIndex } = this.state;
     const inviewTotal = inView > children.length ? children.length : inView;
     const width = ((this.container.offsetWidth - (gutter * (inviewTotal - 1))) / (inviewTotal || 1));
     const newOffset = ((childOffsetCount + childIndex) * (width + gutter));
-    this.setState({ width, rightOffset: newOffset });
+    this.setState({ width, rightOffset: newOffset, animate: false });
   }, 200)
 
   handleDotClick = index => {
