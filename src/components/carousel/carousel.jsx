@@ -159,7 +159,7 @@ class Carousel extends PureComponent {
 
   render() {
     const { rightOffset, animate, childIndex } = this.state;
-    const { animationTime, inView, dots, children, dotsStyle } = this.props;
+    const { animationTime, inView, children, dotsStyle, dotsClassName, dots, dotsType } = this.props;
     return (
         <div className={styles.carousel}>
           <div
@@ -181,8 +181,10 @@ class Carousel extends PureComponent {
           </div>
           <Dots
             handleDotClick={this.handleDotClick}
+            dotsClassName={dotsClassName}
             childrenLength={Children.count(children)}
             dots={dots}
+            dotsType={dotsType}
             inView={inView}
             currentIndex={childIndex}
             style={dotsStyle}
@@ -200,6 +202,9 @@ Carousel.propTypes = {
   animationTime: React.PropTypes.number,
   infinite: React.PropTypes.bool,
   dotsStyle: React.PropTypes.object,
+  dotsType: React.PropTypes.string,
+  dots: React.PropTypes.string.bool,
+  dotsClassName: React.PropTypes.string,
 };
 Carousel.defaultProps = {
   animationTime: 1000,
@@ -208,6 +213,9 @@ Carousel.defaultProps = {
   inView: 2,
   seperation: 30,
   skipBy: undefined,
+  dots: true,
+  dotsClassName: '',
+  dotsType: 'page',
   dotsStyle: {},
 };
 
