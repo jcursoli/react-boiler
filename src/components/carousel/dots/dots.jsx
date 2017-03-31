@@ -4,23 +4,25 @@ import styles from './dots.sass';
 class Dots extends PureComponent {
 
   createDots = count => {
-    const { currentIndex, dots, inView, style } = this.props;
+    const { currentIndex, dotsType, dots, inView, style, dotsClassName } = this.props;
     const pageIndex = Math.ceil(currentIndex / inView) >= count ? count - 1 : Math.ceil(currentIndex / inView);
-    const realIndex = dots === 'page' ? pageIndex : currentIndex;
+    const realIndex = dotsType === 'page' ? pageIndex : currentIndex;
     const dotsArray = [];
+    const dotsClass = dotsClassName ? dotsClassName : '';
+    if (dots === false) return null;
     for (let i = 0; i < count; i ++) {
       if (realIndex === i) {
-        dotsArray.push(<div style={style} onClick={e => this.handleClick(e, i)} key={i} className={`${styles.dot} ${styles.active}`} />);
+        dotsArray.push(<div style={style} onClick={e => this.handleClick(e, i)} key={i} className={`${styles.dot} ${styles.active} ${dotsClass}`} />);
       } else {
-        dotsArray.push(<div style={style} onClick={e => this.handleClick(e, i)} key={i} className={styles.dot} />);
+        dotsArray.push(<div style={style} onClick={e => this.handleClick(e, i)} key={i} className={`${styles.dot} ${dotsClass}`} />);
       }
     }
     return dotsArray;
   }
 
   handleClick = (e, clickedDotIndex) => {
-    const { inView, handleDotClick, dots } = this.props;
-    if (dots === 'page') {
+    const { inView, handleDotClick, dotsType } = this.props;
+    if (dotsType === 'page') {
       handleDotClick(clickedDotIndex * inView);
     } else {
       handleDotClick(clickedDotIndex);
