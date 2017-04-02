@@ -1,4 +1,4 @@
-# executive-react
+# react-carousel
 
 ## Carousel Example
   ```jsx

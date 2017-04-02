@@ -1,20 +1,33 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styles from './dots.sass';
 
-class Dots extends Component {
+class Dots extends PureComponent {
 
   createDots = count => {
     const { currentIndex, dotsType, dots, inView, style, dotsClassName } = this.props;
     const pageIndex = Math.ceil(currentIndex / inView) >= count ? count - 1 : Math.ceil(currentIndex / inView);
-    const realIndex = dotsType === 'page' ? pageIndex : currentIndex;
-    const dotsArray = [];
-    const dotsClass = dotsClassName ? dotsClassName : '';
+    const dotIndex = dotsType === 'page' ? pageIndex : currentIndex;
+    const dotsArray = Array(count - 1);
     if (dots === false) return null;
     for (let i = 0; i < count; i ++) {
-      if (realIndex === i) {
-        dotsArray.push(<div style={style} onClick={e => this.handleClick(e, i)} key={i} className={`${styles.dot} ${styles.active} ${dotsClass}`} />);
+      if (dotIndex === i) {
+        dotsArray.push(
+            <div
+              style={style}
+              onClick={e => this.handleClick(e, i)}
+              key={`${i}_active`}
+              className={`${styles.dot} ${styles.active} ${dotsClassName}`}
+            />
+          );
       } else {
-        dotsArray.push(<div style={style} onClick={e => this.handleClick(e, i)} key={i} className={`${styles.dot} ${dotsClass}`} />);
+        dotsArray.push(
+          <div
+            style={style}
+            onClick={e => this.handleClick(e, i)}
+            key={`${i}_nonactive`}
+            className={`${styles.dot} ${dotsClassName}`}
+          />
+        );
       }
     }
     return dotsArray;
@@ -57,6 +70,10 @@ Dots.propTypes = {
   handleDotClick: React.PropTypes.func.isRequired,
   dotsClassName: React.PropTypes.string.isRequired,
   style: React.PropTypes.objectOf(React.PropTypes.string),
+};
+Dots.defaultProps = {
+  dotsClassName: '',
+  style: {},
 };
 
 export default Dots;
