@@ -29,4 +29,4 @@
 ## Why?   
  * react-carousel has many options that are configurable and makes styling very easy with style and className hooks.
  * offers infinite looping with children passed in
-  * The infinite loop obeys the skipBy prop and always skips the same amount of items each time, even when children are uneven (the reason the carousel was made)
+   * The infinite loop obeys the skipBy prop and always skips the same amount of items each time, even when children are uneven (the reason the carousel was made)
