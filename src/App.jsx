@@ -7,7 +7,7 @@ class App extends Component {
     const dotsStyle = { width: '10px', height: '10px' };
     return (
       <div className={styles.main}>
-        <Carousel inView={2} gutter={30} animationTime={500} skipBy={2} dotsType='page' infinite dotsStyle={dotsStyle}>
+        <Carousel inView={3} skipBy={3} gutter={30} animationTime={500} infinite>
           <div style={{background: "#2f92d6", height: '300px'}} key={1}>1</div>
           <div style={{background: "#2f92d6", height: '300px'}} key={2}>2</div>
           <div style={{background: "#2f92d6", height: '300px'}} key={3}>3</div>

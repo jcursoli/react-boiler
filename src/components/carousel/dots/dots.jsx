@@ -1,36 +1,28 @@
 import React, { PureComponent } from 'react';
+import { fill, trim } from 'lodash';
 import styles from './dots.sass';
 
 class Dots extends PureComponent {
 
   createDots = count => {
-    const { currentIndex, dotsType, dots, inView, style, dotsClassName } = this.props;
-    const pageIndex = Math.ceil(currentIndex / inView) >= count ? count - 1 : Math.ceil(currentIndex / inView);
+    const { currentIndex, dotsType, dots, inView, style, dotsClassName, childrenLength } = this.props;
+    const pageIndex = (currentIndex + 1) > childrenLength ? 0 : Math.ceil(currentIndex / inView);
     const dotIndex = dotsType === 'page' ? pageIndex : currentIndex;
-    const dotsArray = Array(count - 1);
     if (dots === false) return null;
-    for (let i = 0; i < count; i ++) {
-      if (dotIndex === i) {
-        dotsArray.push(
-            <div
-              style={style}
-              onClick={e => this.handleClick(e, i)}
-              key={`${i}_active`}
-              className={`${styles.dot} ${styles.active} ${dotsClassName}`}
-            />
-          );
-      } else {
-        dotsArray.push(
-          <div
-            style={style}
-            onClick={e => this.handleClick(e, i)}
-            key={`${i}_nonactive`}
-            className={`${styles.dot} ${dotsClassName}`}
-          />
-        );
-      }
-    }
-    return dotsArray;
+    return fill(Array(count)).map((unused, index) => {
+      const key = dotIndex === index ? `${index}_active` : `${index}_nonactive`;
+      const className = dotIndex === index ?
+        trim(`${styles.dot} ${styles.active} ${dotsClassName}`) :
+        trim(`${styles.dot} ${dotsClassName}`);
+      return (
+        <div
+          style={style}
+          onClick={e => this.handleClick(e, index)}
+          key={key}
+          className={className}
+        />
+      );
+    });
   }
 
   handleClick = (e, clickedDotIndex) => {
@@ -45,7 +37,7 @@ class Dots extends PureComponent {
   getDots = () => {
     const { dots, inView, childrenLength, dotsType } = this.props;
     const count = Math.ceil(childrenLength / inView);
-    if (!dots) return null;
+    if (!dots) { return null; }
     switch (dotsType) {
       case 'page' :
         return this.createDots(count);
