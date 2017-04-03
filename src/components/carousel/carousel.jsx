@@ -1,5 +1,5 @@
 import React, { PureComponent, Children, cloneElement } from 'react';
-import { debounce, throttle } from 'lodash';
+import { debounce } from 'lodash';
 import styles from './carousel.sass';
 import Dots from './dots/dots';
 
@@ -68,8 +68,9 @@ class Carousel extends PureComponent {
     const newChildren = Children.toArray(mappedChildren);
     if (infinite) {
       // TODO do extra check if inView > length
-      // TODO check if children and inview are not % 2 aka uneven
-      const beginningArray = newChildren.slice(newChildren.length - childOffsetCount, newChildren.length).map((element, index) =>
+      const beginningArray = newChildren
+        .slice(newChildren.length - childOffsetCount, newChildren.length)
+        .map((element, index) =>
         cloneElement(element, {
           ...element.props,
           key: `${index}_beginning`,
@@ -161,47 +162,47 @@ class Carousel extends PureComponent {
     const { rightOffset, animate, childIndex } = this.state;
     const { animationTime, inView, children, dotsStyle, dotsClassName, dots, dotsType } = this.props;
     return (
-        <div className={styles.carousel}>
+      <div className={styles.carousel}>
+        <div
+          onClick={this.handleLeft}
+          className={`${styles['left-arrow']} ${styles.left}`}
+        />
+        <div
+          onClick={this.handleRight}
+          className={`${styles['right-arrow']} ${styles.right}`}
+        />
+        <div className={styles.root}>
           <div
-            onClick={this.handleLeft}
-            className={`${styles['left-arrow']} ${styles.left}`}
-          />
-          <div
-            onClick={this.handleRight}
-            className={`${styles['right-arrow']} ${styles.right}`}
-          />
-          <div className={styles.root}>
-            <div
-              ref={container => { this.container = container; }}
-              style={{ right: rightOffset, transition: animate ? `${animationTime / 1000}s` : '0s' }}
-              className={`${styles['children-container']}`}
-            >
-              { this.mapNewChildren() }
-            </div>
+            ref={container => { this.container = container; }}
+            style={{ right: rightOffset, transition: animate ? `${animationTime / 1000}s` : '0s' }}
+            className={`${styles['children-container']}`}
+          >
+            { this.mapNewChildren() }
           </div>
-          <Dots
-            handleDotClick={this.handleDotClick}
-            dotsClassName={dotsClassName}
-            childrenLength={Children.count(children)}
-            dots={dots}
-            dotsType={dotsType}
-            inView={inView}
-            currentIndex={childIndex}
-            style={dotsStyle}
-          />
         </div>
+        <Dots
+          handleDotClick={this.handleDotClick}
+          dotsClassName={dotsClassName}
+          childrenLength={Children.count(children)}
+          dots={dots}
+          dotsType={dotsType}
+          inView={inView}
+          currentIndex={childIndex}
+          style={dotsStyle}
+        />
+      </div>
     );
   }
 }
 Carousel.propTypes = {
-  children: React.PropTypes.array,
+  children: React.PropTypes.node.isRequired,
   inView: React.PropTypes.number,
   gutter: React.PropTypes.number,
   disabled: React.PropTypes.bool,
   skipBy: React.PropTypes.number,
   animationTime: React.PropTypes.number,
   infinite: React.PropTypes.bool,
-  dotsStyle: React.PropTypes.object,
+  dotsStyle: React.PropTypes.objectOf(React.PropTypes.string),
   dotsType: React.PropTypes.string,
   dots: React.PropTypes.bool,
   dotsClassName: React.PropTypes.string,
