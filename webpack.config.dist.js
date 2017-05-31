@@ -7,6 +7,7 @@ module.exports = {
   output: {
     library: 'Carousel',
     libraryTarget: 'umd',
+    filename: 'carousel.js'
     path: path.resolve(__dirname, 'dist'),
   },
 
