@@ -5,7 +5,8 @@ const sourcePath = path.join(__dirname, './src');
 module.exports = {
   entry: './src/components/carousel/carousel.jsx',
   output: {
-    filename: 'carousel.js',
+    library: 'carousel.js',
+    libraryTarget: 'umd'
     path: path.resolve(__dirname, 'dist'),
   },
 
@@ -32,8 +33,18 @@ module.exports = {
   },
   externals: [
     {
-      react: 'commonjs react',
-      'react-dom': 'commonjs react-dom',
+      react: {
+        root: 'React',
+        commonjs2: 'react',
+        commonjs: 'react',
+        amd: 'react',
+      },
+      'react-dom': {
+        root: 'ReactDOM',
+        commonjs2: 'react-dom',
+        commonjs: 'react-dom',
+        amd: 'react-dom',
+      },
     },
   ],
 };
