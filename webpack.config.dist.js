@@ -5,7 +5,7 @@ const sourcePath = path.join(__dirname, './src');
 module.exports = {
   entry: './src/components/carousel/carousel.jsx',
   output: {
-    library: 'carousel.js',
+    library: 'Carousel',
     libraryTarget: 'umd',
     path: path.resolve(__dirname, 'dist'),
   },
