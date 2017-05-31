@@ -1,6 +1,6 @@
 {
   "name": "reactjs-carousel",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "main": "dist/carousel.js",
   "devDependencies": {
     "babel-preset-stage-0": "^6.22.0",
