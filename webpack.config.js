@@ -14,7 +14,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.sass$/,
+        test: /\.scss/,
         exclude: /node_modules/,
         use:
           extractSass.extract([

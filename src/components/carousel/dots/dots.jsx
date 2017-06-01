@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { fill, trim } from 'lodash';
-import styles from './dots.sass';
+import PropTypes from 'prop-types';
+import styles from './dots.scss';
 
 class Dots extends PureComponent {
 
@@ -54,14 +55,14 @@ class Dots extends PureComponent {
   }
 }
 Dots.propTypes = {
-  dots: React.PropTypes.bool.isRequired,
-  dotsType: React.PropTypes.string.isRequired,
-  inView: React.PropTypes.number.isRequired,
-  currentIndex: React.PropTypes.number.isRequired,
-  childrenLength: React.PropTypes.number.isRequired,
-  handleDotClick: React.PropTypes.func.isRequired,
-  dotsClassName: React.PropTypes.string.isRequired,
-  style: React.PropTypes.objectOf(React.PropTypes.string),
+  dots: PropTypes.bool.isRequired,
+  dotsType: PropTypes.string.isRequired,
+  inView: PropTypes.number.isRequired,
+  currentIndex: PropTypes.number.isRequired,
+  childrenLength: PropTypes.number.isRequired,
+  handleDotClick: PropTypes.func.isRequired,
+  dotsClassName: PropTypes.string.isRequired,
+  style: PropTypes.objectOf(React.PropTypes.string),
 };
 Dots.defaultProps = {
   dotsClassName: '',

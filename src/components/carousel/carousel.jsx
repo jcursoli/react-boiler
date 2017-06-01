@@ -1,6 +1,7 @@
 import React, { PureComponent, Children, cloneElement } from 'react';
 import { debounce } from 'lodash';
-import styles from './carousel.sass';
+import PropTypes from 'prop-types';
+import styles from './carousel.scss';
 import Dots from './dots/dots';
 
 class Carousel extends PureComponent {
@@ -195,17 +196,17 @@ class Carousel extends PureComponent {
   }
 }
 Carousel.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  inView: React.PropTypes.number,
-  gutter: React.PropTypes.number,
-  disabled: React.PropTypes.bool,
-  skipBy: React.PropTypes.number,
-  animationTime: React.PropTypes.number,
-  infinite: React.PropTypes.bool,
-  dotsStyle: React.PropTypes.objectOf(React.PropTypes.string),
-  dotsType: React.PropTypes.string,
-  dots: React.PropTypes.bool,
-  dotsClassName: React.PropTypes.string,
+  children: PropTypes.node.isRequired,
+  inView: PropTypes.number,
+  gutter: PropTypes.number,
+  disabled: PropTypes.bool,
+  skipBy: PropTypes.number,
+  animationTime: PropTypes.number,
+  infinite: PropTypes.bool,
+  dotsStyle: PropTypes.objectOf(PropTypes.string),
+  dotsType: PropTypes.string,
+  dots: PropTypes.bool,
+  dotsClassName: PropTypes.string,
 };
 Carousel.defaultProps = {
   animationTime: 1000,
