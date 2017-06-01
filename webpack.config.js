@@ -14,20 +14,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.scss/,
-        exclude: /node_modules/,
+        test: /\.scss$/,
         use:
-          extractSass.extract([
-            {
-              loader: 'css-loader',
-              options: {
-                localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
-                modules: true,
-                sourceMap: true,
-              },
-            },
-            'sass-loader',
-          ]),
+        [{ loader: 'style-loader' },
+        { loader: 'css-loader', options: { modules: true, importLoaders: 1 } },
+        { loader: 'sass-loader' }],
       },
       {
         test: /\.jsx?$/,
@@ -43,7 +34,5 @@ module.exports = {
       sourcePath,
     ],
   },
-  plugins: [
-    extractSass,
-  ],
+
 };

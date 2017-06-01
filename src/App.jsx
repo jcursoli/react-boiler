@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Carousel from './components/carousel/carousel';
-import styles from './App.sass';
+import styles from './App.scss';
 
 class App extends Component {
   render() {

@@ -38,10 +38,10 @@
     "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-dom": "^15.4.1",
+    "style-loader": "^0.18.1",
     "webpack": "^2.2.1"
   },
   "scripts": {
-    "run:install": "cd ./node_modules/babel-plugin-style-modules && npm run build",
     "webpack": "webpack -w",
     "start": "nodemon services/server.js",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
