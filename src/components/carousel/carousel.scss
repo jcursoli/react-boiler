@@ -9,9 +9,9 @@ $arrow-width: 50px;
   position: absolute;
   top: 30%;
   left: 50%;
-  background: grey;
+  background: black;
   width: 3px;
-  height: 15px;
+  height: 16px;
   border-radius: 3px;
   transform: rotate(45deg);
 }
@@ -20,7 +20,7 @@ $arrow-width: 50px;
     position: absolute;
     top: 50%;
     left: 50%;
-    background: grey;
+    background: black;
     width: 3px;
     height: 15px;
     border-radius: 3px;
@@ -44,6 +44,7 @@ $arrow-width: 50px;
 .right-arrow {
   @include arrow;
   transform: rotate(180deg);
+  top: calc(50% - 20px);
 }
 .left-arrow {
   @include arrow;
