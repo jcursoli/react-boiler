@@ -5,8 +5,6 @@ require('babel-register')({
 });
 
 browserEnv(['window', 'document', 'navigator']);
-
-
 const convertSCSS = source => (
   `module.exports = ${
     JSON.stringify(
