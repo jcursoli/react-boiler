@@ -121,7 +121,7 @@ class Carousel extends PureComponent {
     const newChildIndex = childIndex + skipBy;
     const newOffset = (rightOffset + (skipBy * (width + gutter)));
     // if waiting for setTimeout to finish animating dont continue click
-    // should rarely get here if debounce is precise
+    // should rarely get here as long as setTimeout is not blocked too long by the eventloop
     if (this.animateTimer || disabled) { return; }
     if (newChildIndex >= children.length - 1) {
       if (infinite === true) {

@@ -16,9 +16,6 @@ class App extends Component {
           <div style={{ background: '#2f92d6', height: '300px' }} key={7}>7</div>
           <div style={{ background: '#2f92d6', height: '300px' }} key={8}>8</div>
           <div style={{ background: '#2f92d6', height: '300px' }} key={9}>9</div>
-          <div style={{ background: '#2f92d6', height: '300px' }} key={10}>10</div>
-          <div style={{ background: '#2f92d6', height: '300px' }} key={11}>11</div>
-          <div style={{ background: '#2f92d6', height: '300px' }} key={12}>12</div>
         </Carousel>
       </div>
     );

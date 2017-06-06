@@ -30,3 +30,10 @@
  * react-carousel has many options that are configurable and makes styling very easy with style and className hooks.
  * offers infinite looping with children passed in
    * The infinite loop obeys the skipBy prop and always skips the same amount of items each time, even when children are uneven (the reason the carousel was made)
+
+### Testing
+  * Always begin with shallow
+  * If componentDidMount or componentDidUpdate should be tested, use mount
+  * If you want to test component lifecycle and children behavior, use mount
+  * If you want to test children rendering with less overhead than mount and you are not interested in lifecycle methods, use render
+  Refer to https://github.com/airbnb/enzyme/issues/465
