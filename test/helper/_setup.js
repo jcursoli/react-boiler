@@ -1,8 +1,8 @@
 const hook = require('node-hook');
+const browserEnv = require('browser-env');
 require('babel-register')({
   presets: ['es2015', 'stage-0', 'react'],
 });
-const browserEnv = require('browser-env');
 
 browserEnv(['window', 'document', 'navigator']);
 
