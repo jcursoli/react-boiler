@@ -1,5 +1,5 @@
 # react-carousel
-
+`$ npm install --save reactjs-carousel`
 ## Carousel Example
   ```jsx
 <Carousel inView={3} gutter={30} animationTime={500} skipBy={3} dotsStyle={dotsStyle} infinite>
